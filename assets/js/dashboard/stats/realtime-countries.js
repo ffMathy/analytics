@@ -2,6 +2,7 @@ import React from 'react';
 import Datamap from 'datamaps'
 
 import FadeIn from '../fade-in'
+import numberFormatter from '../number-formatter'
 import Bar from './bar'
 import MoreLink from './more-link'
 import * as api from '../api'
@@ -31,7 +32,6 @@ export default class Countries extends React.Component {
   }
 
   updateCountries() {
-    console.log('UPDATING COUNTRIES')
     this.fetchCountries().then(() => {
       var dataset = {};
 
@@ -102,21 +102,43 @@ export default class Countries extends React.Component {
 
   renderCountry(country) {
     return (
-      <div key={country.name}>
-        {country.full_country_name}: {country.count}
+      <div className="flex items-center justify-between my-1 text-sm" key={country.name}>
+        <div className="w-full h-8" style={{maxWidth: 'calc(100% - 4rem)'}}>
+          <Bar count={country.count} all={this.state.countries} bg="bg-purple-50" />
+          <span className="block px-2" style={{marginTop: '-26px'}}>
+            { country.full_country_name }
+          </span>
+        </div>
+        <span className="font-medium">{numberFormatter(country.count)}</span>
       </div>
     )
+  }
+
+  renderList() {
+    if (this.state.countries.length > 0) {
+      return (
+        <React.Fragment>
+          <div className="flex items-center mt-3 mb-2 justify-between text-gray-500 text-xs font-bold tracking-wide">
+            <span>Country</span>
+            <span>Visitors</span>
+          </div>
+
+          {this.state.countries.slice(0, 10).map(this.renderCountry.bind(this))}
+        </React.Fragment>
+      )
+    } else {
+      return <div className="text-center mt-44 font-medium text-gray-500">No data yet</div>
+    }
   }
 
   renderBody() {
     if (this.state.countries) {
       return (
         <div className="flex justify-between">
-          <div className="">
-            <h3 className="font-bold">Countries</h3>
-            { this.state.countries.map(this.renderCountry) }
-          </div>
           <div style={{width: '100%', maxWidth: '640px', marginTop: '-110px'}} id="map-container"></div>
+          <div className="flex-1 pl-4">
+            { this.renderList() }
+          </div>
         </div>
       )
     }
@@ -127,6 +149,7 @@ export default class Countries extends React.Component {
       <div className="w-full mt-6 relative bg-white shadow-xl rounded p-4" style={{height: '460px'}}>
         { this.state.loading && <div className="loading my-32 mx-auto"><div></div></div> }
         <FadeIn show={!this.state.loading}>
+          <h3 className="font-bold absolute">Countries</h3>
           { this.renderBody() }
         </FadeIn>
       </div>
