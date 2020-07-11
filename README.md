@@ -6,6 +6,7 @@ Plausible Analytics is a simple, lightweight, open-source and privacy-friendly a
 
 ![](https://plausible.io/assets/images/privacy-focused-web-analytics.png)
 
+
 ### Why Plausible?
 
 - **Clutter Free**: Plausible Analytics provides [simple web analytics](https://plausible.io/simple-web-analytics) and it cuts through the noise. No layers of menus, no need for custom reports. Get all the important insights on one single page. No training necessary.
